@@ -1,0 +1,20 @@
+.env
+# Original user-supplied design document stays local; publish the reviewed implementation plan.
+HLD.docx
+.env.*
+!.env.example
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/pytest-cache-files-*/
+**/.mypy_cache/
+**/.ruff_cache/
+**/*.egg-info/
+**/node_modules/
+**/.next/
+**/out/
+**/*.tsbuildinfo
+coverage/
+.coverage
+*.log
+.DS_Store

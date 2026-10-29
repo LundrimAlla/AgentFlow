@@ -1,0 +1,6 @@
+{
+  "scope": "Real Gemini sample extraction; HTTP admission tested separately",
+  "sample_id": "invoice-001",
+  "passed": true,
+  "elapsed_ms": 3403
+}

@@ -1,0 +1,23 @@
+{
+  "metrics_active": true,
+  "restricted_role_flags": [
+    false,
+    false,
+    false,
+    false
+  ],
+  "successful_internal_extraction_stages": [
+    [
+      "document",
+      "success"
+    ],
+    [
+      "validation",
+      "success"
+    ]
+  ],
+  "public_invalid_challenge_status": 403,
+  "cleanup_worker": "startup cleanup successful",
+  "browser_acceptance": "Passed: user reported successful live browser extraction of DEMO-2026-001, with all expected fields and EUR 357.00 total. Evidence is user-provided UI output, not an independently observed browser submission.",
+  "all_m5_acceptance_complete": true
+}

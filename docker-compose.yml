@@ -1,0 +1,68 @@
+name: agentflow
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: agentflow
+      POSTGRES_DB: agentflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Copy .env.example to .env first}
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentflow -d agentflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  api:
+    build: ./backend
+    environment:
+      APP_ENV: development
+      LIVE_ENABLED: ${LIVE_ENABLED:-false}
+      RAG_ENABLED: ${RAG_ENABLED:-false}
+      TELEMETRY_ENABLED: ${TELEMETRY_ENABLED:-false}
+      TELEMETRY_DATABASE_URL: postgresql://agentflow_telemetry:${METRICS_WRITER_PASSWORD:-unset}@db:5432/agentflow
+      RAG_DATABASE_URL: postgresql://agentflow_runtime:${KNOWLEDGE_READER_PASSWORD:-unset}@db:5432/agentflow
+      CORS_ORIGINS: '${CORS_ORIGINS:-["http://localhost:3000","http://127.0.0.1:3000"]}'
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.5-flash-lite}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+      TURNSTILE_HOSTNAMES: '${TURNSTILE_HOSTNAMES:-["localhost","127.0.0.1"]}'
+      UPSTASH_REDIS_REST_URL: ${UPSTASH_REDIS_REST_URL:-}
+      UPSTASH_REDIS_REST_TOKEN: ${UPSTASH_REDIS_REST_TOKEN:-}
+      RATE_LIMIT_HMAC_SECRET: ${RATE_LIMIT_HMAC_SECRET:-}
+    ports:
+      - "127.0.0.1:8000:8000"
+  retention:
+    build: ./backend
+    profiles: ["telemetry"]
+    restart: unless-stopped
+    environment:
+      TELEMETRY_ENABLED: "true"
+      TELEMETRY_DATABASE_URL: postgresql://agentflow_telemetry:${METRICS_WRITER_PASSWORD:-unset}@db:5432/agentflow
+    command: ["python", "-m", "app.telemetry"]
+    depends_on:
+      db:
+        condition: service_healthy
+  migrate:
+    build: ./backend
+    profiles: ["tools"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://agentflow:${POSTGRES_PASSWORD}@db:5432/agentflow
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres_data:

@@ -1,0 +1,16 @@
+SYNTHETIC SAMPLE INVOICE - NOT PAYABLE
+All names, prices and amounts are fictional test data, not a company price list.
+Invoice number: DEMO-2026-001
+Invoice date: 2026-10-27
+Supplier: Alpine Components (fictional)
+Customer: Example Manufacturing Ltd (fictional)
+Currency: EUR
+
+Description | Quantity | Unit price | Line total
+Sample aluminium bracket | 12 | 15.00 | 180.00
+Sample mounting plate | 5 | 24.00 | 120.00
+
+Subtotal: 300.00
+Tax (19%): 57.00
+Total: 357.00
+No payment instructions. No goods have been ordered or delivered.

@@ -1,0 +1,19 @@
+{
+  "temporary_key_ttl_seconds": 60,
+  "ping": {
+    "http_status": 200,
+    "passed": true
+  },
+  "write": {
+    "http_status": 200,
+    "passed": true
+  },
+  "read": {
+    "http_status": 200,
+    "passed": true
+  },
+  "delete": {
+    "http_status": 200,
+    "passed": true
+  }
+}

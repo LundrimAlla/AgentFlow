@@ -1,0 +1,9 @@
+# API contracts
+
+Implemented: `GET /health` returns `{"status":"healthy","version":"0.1.0"}`. This indicates process liveness only, not database/provider readiness. Development OpenAPI is at `/openapi.json`; interactive docs are at `/docs`. Both are disabled in production configuration.
+
+`POST /api/chat` is registered only when `LIVE_ENABLED=true` with valid configuration. It accepts `messages` and `turnstile_token`; a conversation has at most ten user messages and nine assistant replies (nineteen messages), alternates roles, and ends with the current unanswered user message. Each message has 1–2,000 characters and nonblank text. Client system/tool roles and extra fields are rejected. The challenge token is bounded separately. A 20,000-byte raw body ceiling may be reached before the maximum turn count.
+
+Successful responses contain a server-generated `request_id`, `mode=live`, `answer`, optional typed `lead`, empty `citations` until M4, and allowlisted `trace` stages with status and elapsed milliseconds. The API returns `Cache-Control: no-store`. Errors contain only `error`, a safe `message`, and `request_id`: 403 verification failure, 408 upload timeout, 413 oversized body, 415 unsupported encoding, 422 invalid input, 429 quota exhausted, 502 invalid/provider failure, 503 unavailable protection/service, or 504 deadline exceeded. Quota errors include `Retry-After`. No prompt or provider payload is echoed.
+
+`backend/export_contract.py` exports registered routes to `docs/openapi.json` and generates `frontend/app/live/api.generated.ts`. CI checks for drift. The generator fails on unsupported schema constructs. Runtime constraints remain authoritative in Pydantic; generated TypeScript is a compile-time contract. See [LIVE.md](LIVE.md) for admission details and deployment gates.

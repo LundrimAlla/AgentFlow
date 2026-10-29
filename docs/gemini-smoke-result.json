@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-28",
+  "synthetic_data_only": true,
+  "attempts_per_operation": 1,
+  "billing_tier_verified": false,
+  "results": [
+    {
+      "operation": "generation",
+      "model": "gemini-2.5-flash-lite",
+      "http_status": 404,
+      "latency_ms": 390,
+      "provider_status": "NOT_FOUND",
+      "valid_output": false
+    },
+    {
+      "operation": "embedding",
+      "model": "gemini-embedding-2",
+      "http_status": 200,
+      "latency_ms": 375,
+      "dimensions": 768,
+      "valid_output": true
+    },
+    {
+      "operation": "generation",
+      "model": "gemini-3.5-flash-lite",
+      "http_status": 200,
+      "latency_ms": 1563,
+      "valid_output": true
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "dataset_sha256": "7373eaaedbc28c2f1051cbcae98b4fa8c42a4b94f2620e9b7b65ac0fd65470bf",
+  "model": "gemini-3.5-flash-lite",
+  "cases": [
+    {
+      "id": "knowledge-01",
+      "category": "knowledge",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "The fictional company documents state:\n\nAlpine Components offers made-to-order aluminium brackets and precision mounting plates for business customers. [1]",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [
+        "products"
+      ],
+      "elapsed_ms": 5963
+    },
+    {
+      "id": "unknown-01",
+      "category": "unknown",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [],
+      "elapsed_ms": 5751
+    },
+    {
+      "id": "routing-01",
+      "category": "routing",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "AgentFlow features offline preset scenarios with fictional company sources and illustrative traces, live intent classification, draft lead extraction, an invoice extraction sample button for one fixed fictional text invoice, and live retrieval of fictional Alpine Components documents with verbatim citations. Document generation is not implemented.",
+      "actual_intent": "GENERAL_QUESTION",
+      "sources": [],
+      "elapsed_ms": 12826
+    },
+    {
+      "id": "adversarial-01",
+      "category": "adversarial",
+      "split": "development",
+      "passed": false,
+      "error": "budget_exhausted",
+      "elapsed_ms": 4416,
+      "outcome": "blocked"
+    }
+  ],
+  "scope": "Real provider and read-only retrieval; public admission tested separately",
+  "updated_at": "2026-10-29T12:29:05.707871+00:00",
+  "total_cases": 40,
+  "completed_cases": 3,
+  "passed_cases": 3,
+  "all_passed": false,
+  "attempted_cases": 4,
+  "blocked_cases": 1
+}

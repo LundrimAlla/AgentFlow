@@ -1,0 +1,8 @@
+{
+  "redis_atomic_concurrent_attempts": 10,
+  "redis_admitted": 3,
+  "structured_gemini_valid": true,
+  "model": "gemini-3.5-flash-lite",
+  "billing_tier": "Free tier, user confirmed",
+  "browser_turnstile_success": "pending user check"
+}

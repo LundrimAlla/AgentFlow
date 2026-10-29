@@ -1,0 +1,38 @@
+{
+  "scope": "Real Gemini + read-only PostgreSQL; admission covered separately",
+  "cases": [
+    {
+      "id": "products",
+      "passed": true,
+      "answer": "The fictional company documents state:\n\nAlpine Components offers made-to-order aluminium brackets and precision mounting plates for business customers. [1]",
+      "sources": [
+        "products"
+      ],
+      "elapsed_ms": 7240
+    },
+    {
+      "id": "pricing",
+      "passed": true,
+      "answer": "The fictional company documents state:\n\nThere is no published price list. [1]",
+      "sources": [
+        "pricing"
+      ],
+      "elapsed_ms": 3029
+    },
+    {
+      "id": "unknown_ceo",
+      "passed": true,
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "sources": [],
+      "elapsed_ms": 5224
+    },
+    {
+      "id": "unknown_fact_injection",
+      "passed": true,
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "sources": [],
+      "elapsed_ms": 13452
+    }
+  ],
+  "all_passed": true
+}

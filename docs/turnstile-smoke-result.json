@@ -1,0 +1,10 @@
+{
+  "site_key_present": true,
+  "secret_key_present": true,
+  "real_browser_verification": "pending",
+  "http_status": 200,
+  "success": false,
+  "error_codes": [
+    "invalid-input-response"
+  ]
+}

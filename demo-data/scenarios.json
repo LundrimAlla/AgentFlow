@@ -1,0 +1,143 @@
+[
+  {
+    "id": "product-inquiry",
+    "title": "Product inquiry",
+    "description": "Explore the catalogue and required specifications.",
+    "intent": "KNOWLEDGE_QUERY",
+    "question": "What components does Alpine Components offer, and what details should I provide?",
+    "answer": "Alpine Components offers made-to-order aluminium brackets and precision mounting plates for business customers. Brackets support mounting and alignment; plates provide a base for attaching equipment components. Prepare dimensions, hole patterns, material requirements, and quantity for technical review. The catalogue does not establish suitability or a certified load rating for your application.",
+    "citations": [
+      {
+        "source": "products",
+        "excerpt": "Alpine Components offers made-to-order aluminium brackets and precision mounting plates for business customers."
+      },
+      {
+        "source": "products",
+        "excerpt": "Brackets support mounting and alignment applications. Mounting plates provide a base for attaching equipment components. Customers must specify dimensions, hole patterns, material requirements, and quantity for technical review."
+      },
+      {
+        "source": "products",
+        "excerpt": "The catalogue does not publish stock availability or certified load ratings. Suitability for a particular application requires review."
+      }
+    ],
+    "trace": [
+      {
+        "agent": "Safety",
+        "detail": "Synthetic question within the demo scope."
+      },
+      {
+        "agent": "Router",
+        "detail": "Prepared route: KNOWLEDGE_QUERY."
+      },
+      {
+        "agent": "RAG",
+        "detail": "Prepared evidence from products; no vector search ran."
+      },
+      {
+        "agent": "Response",
+        "detail": "Loaded a prepared answer from the scenario fixture."
+      },
+      {
+        "agent": "Validation",
+        "detail": "Illustrates checking sources and avoiding unsupported claims. No model validation ran."
+      }
+    ],
+    "lead": null
+  },
+  {
+    "id": "quote-request",
+    "title": "Quote request",
+    "description": "Structure a fictional inquiry without submitting it.",
+    "intent": "QUOTE_REQUEST",
+    "question": "Our fictional company, Example Equipment GmbH, needs 200 aluminium brackets. Can you give us a quote?",
+    "answer": "Here is a prepared request for 200 aluminium brackets for Example Equipment GmbH. To prepare a quote, we would still need a target delivery date, dimensions, hole patterns, material requirements, and any finish requirements. There is no published price list, so a price cannot be provided from this knowledge base. Nothing has been submitted and no order has been placed.",
+    "citations": [
+      {
+        "source": "services",
+        "excerpt": "A quote request should include the product, quantity, target delivery date, dimensions, hole patterns, material requirements, and any finish requirements."
+      },
+      {
+        "source": "pricing",
+        "excerpt": "There is no published price list. Pricing depends on the component specification, quantity, finish, and technical review."
+      },
+      {
+        "source": "services",
+        "excerpt": "The public AgentFlow demo does not transmit requests, upload drawings, contact staff, or place orders. Its quote workflow only illustrates how a request could be structured."
+      }
+    ],
+    "trace": [
+      {
+        "agent": "Safety",
+        "detail": "Synthetic question within the demo scope."
+      },
+      {
+        "agent": "Router",
+        "detail": "Prepared route: QUOTE_REQUEST."
+      },
+      {
+        "agent": "Lead",
+        "detail": "Prepared company, product, and quantity; unspecified fields remain unknown."
+      },
+      {
+        "agent": "RAG",
+        "detail": "Prepared evidence from services and pricing; no vector search ran."
+      },
+      {
+        "agent": "Response",
+        "detail": "Loaded a prepared answer from the scenario fixture."
+      },
+      {
+        "agent": "Validation",
+        "detail": "Illustrates checking sources and avoiding unsupported claims. No model validation ran."
+      }
+    ],
+    "lead": {
+      "customer_type": "B2B",
+      "company": "Example Equipment GmbH",
+      "product": "Aluminium brackets",
+      "quantity": 200,
+      "urgency": null
+    }
+  },
+  {
+    "id": "delivery-policy",
+    "title": "Knowledge question",
+    "description": "Handle an unsupported delivery guarantee.",
+    "intent": "KNOWLEDGE_QUERY",
+    "question": "Can you guarantee delivery of mounting plates within five days?",
+    "answer": "I cannot guarantee delivery within five days. The knowledge base provides no guaranteed lead time, inventory count, or shipping commitment. You may include a target delivery date in a request, but delivery is confirmed only after technical review and a separately agreed order.",
+    "citations": [
+      {
+        "source": "policies",
+        "excerpt": "Delivery dates are confirmed only after technical review and a separately agreed order. The knowledge base contains no guaranteed lead time, inventory count, or shipping commitment."
+      },
+      {
+        "source": "faq",
+        "excerpt": "Can I request a particular delivery date? A target delivery date may be included in a request, but it is not a confirmed delivery date."
+      }
+    ],
+    "trace": [
+      {
+        "agent": "Safety",
+        "detail": "Synthetic question within the demo scope."
+      },
+      {
+        "agent": "Router",
+        "detail": "Prepared route: KNOWLEDGE_QUERY."
+      },
+      {
+        "agent": "RAG",
+        "detail": "Prepared evidence from policies and FAQ; no vector search ran."
+      },
+      {
+        "agent": "Response",
+        "detail": "Loaded a prepared answer from the scenario fixture."
+      },
+      {
+        "agent": "Validation",
+        "detail": "Illustrates checking sources and avoiding unsupported claims. No model validation ran."
+      }
+    ],
+    "lead": null
+  }
+]
