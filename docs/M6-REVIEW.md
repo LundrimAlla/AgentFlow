@@ -140,3 +140,31 @@ overflow, and text contrast checks in the inspected home, architecture, live-ini
 and demo states found no failures. These were limited DOM observations, not a full
 accessibility certification. Fresh real Chrome/Edge Turnstile and successful live
 citation inspection remain unconfirmed after the CSP change.
+
+## Routing revision v2 — 2 November 2026
+
+Clarified the router boundary: questions about requirements and steps for obtaining
+company quotes require KNOWLEDGE_QUERY; preparing the user's own request uses lead
+extraction; GENERAL_QUESTION is limited to AgentFlow capabilities. This is a prompt
+correction, not a proven model-accuracy improvement yet.
+
+The original failed baseline remains unchanged in m6-evaluation-result.json.
+New results are in m6-evaluation-v2-result.json. The runner fingerprints workflow
+implementation files and refuses to merge results across implementation, dataset or
+model revisions (including legacy reports without an implementation fingerprint).
+Selected development cases can be run using repeated --case arguments.
+
+Validation: 91 backend tests passed with PostgreSQL/Redis; Ruff and mypy passed.
+The local API was rebuilt with the revision. The real capabilities control passed;
+the original quote-information regression was blocked by budget_exhausted before
+execution. The draft-request control was not reached. No quota was raised or reset.
+One completed v2 case must not be combined with the 12-case baseline as one evaluation.
+
+After normal budget recovery, from backend run:
+```
+.\.venv\Scripts\python.exe evaluate_m6.py --limit 2 --retry-blocked --case knowledge-03 --case routing-03
+```
+Then continue the v2 full dataset in bounded batches. The baseline summary script
+still summarizes the baseline; m6-evaluation-v2-summary.json describes only v2.
+The prior commit's CI and CodeQL both completed successfully; authenticated scanning
+reported zero open findings after the test-fixture hostname fix.

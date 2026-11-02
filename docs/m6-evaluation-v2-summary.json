@@ -1,0 +1,48 @@
+{
+  "total_cases": 40,
+  "completed_cases": 1,
+  "blocked_cases": 1,
+  "unattempted_cases": 38,
+  "groups": {
+    "knowledge": {
+      "expected": 15,
+      "completed": 0,
+      "passed": 0
+    },
+    "unknown": {
+      "expected": 10,
+      "completed": 0,
+      "passed": 0
+    },
+    "routing": {
+      "expected": 10,
+      "completed": 1,
+      "passed": 1
+    },
+    "adversarial": {
+      "expected": 5,
+      "completed": 0,
+      "passed": 0
+    }
+  },
+  "routing_checks": {
+    "correct": 1,
+    "evaluated": 1
+  },
+  "retrieval_at_5": {
+    "instrumented_cases": 0,
+    "hit_cases": 0,
+    "expected_sources_matched": 0,
+    "expected_sources_total": 0,
+    "source_recall": null,
+    "note": "Expected sources are curated fixture labels; human relevance review pending."
+  },
+  "observed_latency_ms": {
+    "samples": 1,
+    "p50_nearest_rank": 2579,
+    "p95_nearest_rank": 2579,
+    "note": "Not a warm/cold benchmark. Provider state is uncontrolled; small samples are not representative latency targets."
+  },
+  "evaluation_complete": false,
+  "release_approved": false
+}

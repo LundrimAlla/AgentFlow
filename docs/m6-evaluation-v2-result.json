@@ -1,0 +1,42 @@
+{
+  "dataset_sha256": "7373eaaedbc28c2f1051cbcae98b4fa8c42a4b94f2620e9b7b65ac0fd65470bf",
+  "model": "gemini-3.5-flash-lite",
+  "implementation_sha256": "3784f80ec91c009434c420a07cc977db2d02a23ce6ad896f2824754e6762ea35",
+  "cases": [
+    {
+      "id": "routing-01",
+      "category": "routing",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "AgentFlow demonstrates offline preset scenarios with fictional company sources and illustrative traces, live intent classification, draft lead extraction, a fixed fictional invoice extraction sample, and live retrieval of fictional Alpine Components documents with verbatim citations. Document generation is not implemented.",
+      "actual_intent": "GENERAL_QUESTION",
+      "sources": [],
+      "elapsed_ms": 2579
+    },
+    {
+      "id": "knowledge-03",
+      "category": "knowledge",
+      "split": "development",
+      "passed": false,
+      "outcome": "blocked",
+      "error": "budget_exhausted",
+      "elapsed_ms": 57
+    }
+  ],
+  "scope": "Real provider and read-only retrieval; public admission tested separately",
+  "updated_at": "2026-11-02T13:55:50.489738+00:00",
+  "total_cases": 40,
+  "attempted_cases": 2,
+  "completed_cases": 1,
+  "blocked_cases": 1,
+  "passed_cases": 1,
+  "all_passed": false
+}

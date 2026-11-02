@@ -21,6 +21,24 @@ from app.schemas.chat import ChatRequest, Contract, Message
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def implementation_digest() -> str:
+    """Prevent resuming model evidence across different workflow implementations."""
+    digest = hashlib.sha256()
+    for name in ("live.py", "grounding.py", "retrieval.py", "schemas/chat.py"):
+        digest.update(name.encode())
+        digest.update((ROOT / "backend/app" / name).read_bytes())
+    return digest.hexdigest()
+
+
+def validate_report(report: dict, dataset: str, model: str, implementation: str) -> None:
+    if (
+        report.get("dataset_sha256") != dataset
+        or report.get("model") != model
+        or report.get("implementation_sha256") != implementation
+    ):
+        raise SystemExit("Evaluation version changed; use a separate report to preserve evidence.")
+
+
 class ObservedStore(PostgresKnowledgeStore):
     ranked: list[RetrievedChunk] | None = None
 
@@ -39,28 +57,29 @@ class ObservedServices(LiveServices):
         return result
 
 
-async def main(limit: int, retry_blocked: bool = False) -> None:
+async def main(limit: int, retry_blocked: bool = False, case_ids: list[str] | None = None) -> None:
     settings = Settings()
     if not settings.rag_enabled:
         raise SystemExit("Live retrieval must be enabled.")
     fixture = ROOT / "demo-data/m6-evaluation.json"
     digest = hashlib.sha256(fixture.read_bytes()).hexdigest()
     cases = json.loads(fixture.read_text(encoding="utf-8"))
-    destination = ROOT / "docs/m6-evaluation-result.json"
+    if case_ids and not set(case_ids) <= {case["id"] for case in cases}:
+        raise SystemExit("Unknown evaluation case ID.")
+    implementation = implementation_digest()
+    destination = ROOT / "docs/m6-evaluation-v2-result.json"
     report = (
         json.loads(destination.read_text())
         if destination.exists()
         else {
             "dataset_sha256": digest,
             "model": settings.gemini_model,
+            "implementation_sha256": implementation,
             "cases": [],
             "scope": "Real provider and read-only retrieval; public admission tested separately",
         }
     )
-    if report["dataset_sha256"] != digest or report["model"] != settings.gemini_model:
-        raise SystemExit(
-            "Dataset/model changed; archive the previous report before a new evaluation."
-        )
+    validate_report(report, digest, settings.gemini_model, implementation)
     if retry_blocked:
         report.setdefault("previous_blocked_attempts", []).extend(
             row for row in report["cases"] if "error" in row
@@ -70,9 +89,12 @@ async def main(limit: int, retry_blocked: bool = False) -> None:
     store = ObservedStore(settings.rag_database_url.get_secret_value())
     async with httpx.AsyncClient(timeout=12, trust_env=False) as client:
         services = ObservedServices(settings, client, store)
-        for case in [c for c in cases if c["id"] not in completed][:limit]:
+        for case in [
+            c for c in cases if c["id"] not in completed and (not case_ids or c["id"] in case_ids)
+        ][:limit]:
             started = perf_counter()
             store.ranked = None
+            services.intent = None
             row = {"id": case["id"], "category": case["category"], "split": case["split"]}
             try:
                 async with asyncio.timeout(settings.chat_timeout_seconds):
@@ -157,6 +179,7 @@ async def main(limit: int, retry_blocked: bool = False) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int, choices=range(1, 41), default=4)
+    parser.add_argument("--case", action="append", dest="case_ids", help="Select a case ID")
     parser.add_argument(
         "--retry-blocked",
         action="store_true",
@@ -166,6 +189,6 @@ if __name__ == "__main__":
     if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     try:
-        asyncio.run(main(args.limit, args.retry_blocked))
+        asyncio.run(main(args.limit, args.retry_blocked, args.case_ids))
     except Exception:
         raise SystemExit("Evaluation stopped; inspect safe report and configuration.") from None

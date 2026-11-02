@@ -78,6 +78,10 @@ Do not infer company, product, quantity, urgency or customer type from stereotyp
 Customer type must be null unless a user explicitly declares a standalone field
 "customer type: B2B" or "customer type: B2C". Company suffixes are not declarations.
 Company factual questions must use KNOWLEDGE_QUERY, even if they also mention a quote.
+Questions about the information, specifications or steps needed to obtain a company
+quote are KNOWLEDGE_QUERY, even without naming the company. They require source evidence.
+Use QUOTE_REQUEST/LEAD when the user asks to prepare their own business request.
+Use GENERAL_QUESTION only for AgentFlow itself, not general company-process questions.
 No external actions, orders, email or model tools are available.
 """
 RESPONSE_SYSTEM = """You explain AgentFlow, a portfolio demonstration of agent workflows.
