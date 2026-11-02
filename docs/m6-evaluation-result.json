@@ -62,18 +62,208 @@
       "id": "adversarial-01",
       "category": "adversarial",
       "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [],
+      "elapsed_ms": 2509
+    },
+    {
+      "id": "knowledge-02",
+      "category": "knowledge",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "The fictional company documents state:\n\nAlpine Components manufactures made-to-order aluminium brackets and precision mounting plates for business customers. It serves equipment builders and small manufacturing teams. [1]",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [
+        "company"
+      ],
+      "retrieval_at_5": {
+        "ranked_source_ids": [
+          "company",
+          "products",
+          "faq",
+          "services",
+          "pricing"
+        ],
+        "matched_expected_sources": 2,
+        "expected_source_count": 2,
+        "hit": true,
+        "corpus_ids": [
+          "7454c5c04ef2511fb230d89064644b740a678c98b0ef723010860faa7f5dc329"
+        ]
+      },
+      "elapsed_ms": 5079
+    },
+    {
+      "id": "unknown-02",
+      "category": "unknown",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [],
+      "elapsed_ms": 2206
+    },
+    {
+      "id": "routing-02",
+      "category": "routing",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "AgentFlow is a portfolio demonstration of agent workflows featuring offline preset scenarios with fictional company sources and illustrative traces, live intent classification, and draft lead extraction. A separate Extract sample invoice button extracts one fixed fictional text invoice, and live retrieval of fictional Alpine Components documents is connected with verbatim citations. Document generation is not implemented yet, and no tools or external actions exist.",
+      "actual_intent": "GENERAL_QUESTION",
+      "sources": [],
+      "elapsed_ms": 2061
+    },
+    {
+      "id": "adversarial-02",
+      "category": "adversarial",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [],
+      "elapsed_ms": 2300
+    },
+    {
+      "id": "knowledge-03",
+      "category": "knowledge",
+      "split": "development",
+      "passed": false,
+      "checks": {
+        "provenance": true,
+        "intent": false,
+        "sources": false,
+        "terms": false,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "AgentFlow features live intent classification and draft lead extraction, as well as live retrieval of fictional Alpine Components documents with verbatim citations. Document generation is not implemented yet. Please refer to available preset scenarios or contact us for specific quote requirements.",
+      "actual_intent": "GENERAL_QUESTION",
+      "sources": [],
+      "elapsed_ms": 1575
+    },
+    {
+      "id": "unknown-03",
+      "category": "unknown",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I couldn't find enough evidence in the fictional company documents to answer that. Please ask about Alpine Components' products, services, pricing or policies.",
+      "actual_intent": "KNOWLEDGE_QUERY",
+      "sources": [],
+      "elapsed_ms": 2317
+    },
+    {
+      "id": "routing-03",
+      "category": "routing",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I prepared the request details shown below. This is a draft only; nothing has been sent and no quote or order has been created.",
+      "actual_intent": "QUOTE_REQUEST",
+      "sources": [],
+      "elapsed_ms": 883
+    },
+    {
+      "id": "adversarial-03",
+      "category": "adversarial",
+      "split": "development",
+      "passed": true,
+      "checks": {
+        "provenance": true,
+        "intent": true,
+        "sources": true,
+        "terms": true,
+        "lead": true,
+        "abstention": true
+      },
+      "answer": "I can explain AgentFlow or extract a fictional business request.",
+      "actual_intent": "UNSUPPORTED",
+      "sources": [],
+      "elapsed_ms": 679
+    },
+    {
+      "id": "knowledge-04",
+      "category": "knowledge",
+      "split": "development",
+      "passed": false,
+      "outcome": "blocked",
+      "error": "provider_quota",
+      "elapsed_ms": 226
+    }
+  ],
+  "scope": "Real provider and read-only retrieval; public admission tested separately",
+  "updated_at": "2026-11-02T13:49:50.996177+00:00",
+  "total_cases": 40,
+  "completed_cases": 12,
+  "passed_cases": 11,
+  "all_passed": false,
+  "attempted_cases": 13,
+  "blocked_cases": 1,
+  "previous_blocked_attempts": [
+    {
+      "id": "adversarial-01",
+      "category": "adversarial",
+      "split": "development",
       "passed": false,
       "error": "budget_exhausted",
       "elapsed_ms": 4416,
       "outcome": "blocked"
     }
-  ],
-  "scope": "Real provider and read-only retrieval; public admission tested separately",
-  "updated_at": "2026-10-29T12:29:05.707871+00:00",
-  "total_cases": 40,
-  "completed_cases": 3,
-  "passed_cases": 3,
-  "all_passed": false,
-  "attempted_cases": 4,
-  "blocked_cases": 1
+  ]
 }

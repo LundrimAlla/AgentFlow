@@ -1,23 +1,24 @@
 # M6 hardening checkpoint
 
-Date: 29 October 2026. Status: **in progress; not release-approved**.
+Date: 2 November 2026. Status: **in progress; not release-approved**.
 
 ## Evidence and limits
 
 | Area | Result | Evidence / limit |
 | --- | --- | --- |
-| Backend regression | 86 passed with real local PostgreSQL and Redis enabled | Includes disposable database tests; no live quota reset |
+| Backend regression | 87 passed with real local PostgreSQL and Redis enabled | Includes disposable database tests; no live quota reset |
 | Atomic quota concurrency | Pass | 40 parallel reservations admitted exactly 7; rejected reservations changed neither counter; TTL was not extended |
 | Dependency failures | Pass | Verification, generation and embedding timeout/429/503 matrix; no retries, leaked details or fabricated answers |
 | Privacy and retention | Pass | Typed metadata, outage isolation, restricted grants, repeatable expiry and cascade tests |
 | Evaluation corpus | 40 cases authored and structurally checked | 15 knowledge, 10 unknown, 10 routing, 5 adversarial; 8 designated held-out |
-| Live M6 evaluation | 3 completed, all 3 passed; 1 quota-blocked; 36 unattempted | 37 cases still need completion. Do not equate authored cases with passed cases |
+| Live M6 evaluation | 12 completed: 11 passed, 1 routing failure; 1 provider-quota-blocked; 27 unattempted | 28 cases still need completion, plus correction and re-evaluation of the routing failure. Do not equate authored cases with passed cases |
 | Backend dependency audit | No known vulnerabilities reported | `m6-python-audit.json`; locked runtime dependencies only |
 | Frontend dependency audit | No known production vulnerabilities reported | `m6-npm-audit.json`; development dependencies excluded |
 | Exact configured-secret check | Finding requires attention | `m6-secret-check.json`; local database password equals the documented development example |
 | Security headers | Baseline CSP and other headers present | `m6-header-check.json`; not a strict nonce CSP |
 | Frontend checks | Lint, TypeScript, four fixture tests and production build passed | Production build remains statically rendered |
-| Hosted security checks | Not executed | CodeQL and gitleaks configured; no Git remote/hosted run or branch protection verified |
+| Hosted security checks | Initial CI and CodeQL executions succeeded | Commit `6adfef26ded0b615e44b8d59683431a1670f9bb5`; one CodeQL test-fixture hostname finding, exact-match fix awaiting hosted rescan; branch protection unverified |
+| General secret scan | No leaks detected | Local pinned Gitleaks scan and initial hosted secrets job passed |
 
 The secret check scans Git-visible files and the public static bundle for exact
 configured secret values of at least eight characters. It is not a general secret
@@ -101,5 +102,41 @@ and enables that test rather than silently skipping it. Ruff and mypy passed.
 
 Before M6 can close: complete and review all 40 evaluation cases under normal budgets;
 measure retrieval recall and representative warm/cold latency; complete accessibility
-and real-browser CSP/live-citation checks; run general secret scanning and hosted
-CodeQL; resolve material findings and document the final release gate decision.
+and real-browser CSP/live-citation checks; verify the updated hosted
+CodeQL finding is resolved; resolve material findings and document the final release gate decision.
+
+## Resumed checkpoint — 2 November 2026
+
+The unfinished ranking instrumentation and summary were reviewed. Full backend tests
+passed (87) with local PostgreSQL and Redis; Ruff, formatting and mypy passed. After
+replacing loose hostname matching in the HTTP test fixture with exact matching, all
+20 affected live tests passed. This is test transport matching, not production URL
+validation. Hosted CodeQL had reported `py/incomplete-url-substring-sanitization`.
+
+Initial hosted evidence at commit `6adfef26ded0b615e44b8d59683431a1670f9bb5`:
+- [CI run](https://github.com/LundrimAlla/AgentFlow/actions/runs/40892170799): success.
+- [CodeQL run](https://github.com/LundrimAlla/AgentFlow/actions/runs/40892169746): success;
+  scan completion is distinct from the open finding noted above.
+
+The application token quota expired naturally. The resumed evaluation completed nine
+additional cases before Gemini returned `provider_quota` on knowledge-04. No quotas
+were changed and no automatic provider retries were made. Current evidence supersedes
+the earlier three-case checkpoint above: 12 completed, 11 passed, one failed, one
+blocked, 27 unattempted. All completed cases so far are development cases.
+
+**Open defect:** knowledge-03 (quote-request information) routed to GENERAL_QUESTION
+instead of KNOWLEDGE_QUERY, producing no source citations. Preserve this failed baseline;
+correct the routing distinction and evaluate a separately identified prompt revision.
+Do not tune using held-out results or overwrite the failed evidence as a pass.
+
+Raw top-five retrieval instrumentation is now tested; serving still uses its original
+top-four similarity cutoff. Only one completed case has this instrumentation so far;
+its two expected source labels were retrieved. This is not a representative recall
+estimate. The first knowledge case predates instrumentation. The generated
+`m6-evaluation-summary.json` excludes blocked cases from latency and pass counts.
+
+Earlier browser observations also covered all four pages at 320px without horizontal
+overflow, and text contrast checks in the inspected home, architecture, live-initial
+and demo states found no failures. These were limited DOM observations, not a full
+accessibility certification. Fresh real Chrome/Edge Turnstile and successful live
+citation inspection remain unconfirmed after the CSP change.

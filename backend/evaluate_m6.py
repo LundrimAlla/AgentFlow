@@ -15,10 +15,18 @@ import httpx
 from app.core.config import Settings
 from app.grounding import ABSTENTION
 from app.live import Decision, LiveError, LiveServices
-from app.retrieval import PostgresKnowledgeStore
+from app.retrieval import PostgresKnowledgeStore, RetrievedChunk
 from app.schemas.chat import ChatRequest, Contract, Message
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+class ObservedStore(PostgresKnowledgeStore):
+    ranked: list[RetrievedChunk] | None = None
+
+    async def search(self, vector: list[float]) -> list[RetrievedChunk]:
+        self.ranked = await self.rank(vector, limit=5)
+        return [chunk for chunk in self.ranked[:4] if chunk.similarity >= 0.35]
 
 
 class ObservedServices(LiveServices):
@@ -59,11 +67,12 @@ async def main(limit: int, retry_blocked: bool = False) -> None:
         )
         report["cases"] = [row for row in report["cases"] if "error" not in row]
     completed = {row["id"] for row in report["cases"]}
-    store = PostgresKnowledgeStore(settings.rag_database_url.get_secret_value())
+    store = ObservedStore(settings.rag_database_url.get_secret_value())
     async with httpx.AsyncClient(timeout=12, trust_env=False) as client:
         services = ObservedServices(settings, client, store)
         for case in [c for c in cases if c["id"] not in completed][:limit]:
             started = perf_counter()
+            store.ranked = None
             row = {"id": case["id"], "category": case["category"], "split": case["split"]}
             try:
                 async with asyncio.timeout(settings.chat_timeout_seconds):
@@ -114,6 +123,16 @@ async def main(limit: int, retry_blocked: bool = False) -> None:
                     actual_intent=services.intent,
                     sources=sorted(sources),
                 )
+                if case["category"] == "knowledge" and store.ranked is not None:
+                    retrieved = {chunk.source_id for chunk in store.ranked}
+                    relevant = set(case["expected_sources"])
+                    row["retrieval_at_5"] = {
+                        "ranked_source_ids": [chunk.source_id for chunk in store.ranked],
+                        "matched_expected_sources": len(retrieved & relevant),
+                        "expected_source_count": len(relevant),
+                        "hit": bool(retrieved & relevant),
+                        "corpus_ids": sorted({chunk.corpus_id for chunk in store.ranked}),
+                    }
             except (LiveError, TimeoutError) as error:
                 row.update(
                     passed=False,

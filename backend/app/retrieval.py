@@ -48,6 +48,12 @@ class PostgresKnowledgeStore:
         self.url = url.replace("postgresql+psycopg://", "postgresql://", 1)
 
     async def search(self, vector: list[float]) -> list[RetrievedChunk]:
+        return [chunk for chunk in await self.rank(vector, limit=4) if chunk.similarity >= 0.35]
+
+    async def rank(self, vector: list[float], *, limit: int = 5) -> list[RetrievedChunk]:
+        """Raw bounded ranking for evaluation; runtime search keeps its top-four cutoff."""
+        if not 1 <= limit <= 5:
+            raise ValueError("Ranking limit must be between one and five")
         # Exact cosine search is appropriate for this tiny corpus. No approximate index needed.
         async with await psycopg.AsyncConnection.connect(
             self.url,
@@ -65,9 +71,9 @@ class PostgresKnowledgeStore:
                 JOIN knowledge_chunks k ON k.corpus_id = c.id
                 JOIN knowledge_sources s ON s.corpus_id = k.corpus_id AND s.source_id = k.source_id
                 WHERE c.embedding_model = %s AND c.dimensions = %s
-                ORDER BY k.embedding <=> %s::vector, k.chunk_id LIMIT 4
+                ORDER BY k.embedding <=> %s::vector, k.chunk_id LIMIT %s
             """,
-                (json.dumps(vector), EMBEDDING_MODEL, DIMENSIONS, json.dumps(vector)),
+                (json.dumps(vector), EMBEDDING_MODEL, DIMENSIONS, json.dumps(vector), limit),
             )
             rows = await cursor.fetchall()
         return [
@@ -82,7 +88,6 @@ class PostgresKnowledgeStore:
                 similarity=float(row["similarity"]),
             )
             for row in rows
-            if float(row["similarity"]) >= 0.35
         ]
 
     async def source(self, corpus_id: str, source_id: str) -> SourceDocument | None:

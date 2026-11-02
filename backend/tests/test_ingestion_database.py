@@ -94,6 +94,12 @@ def test_atomic_ingestion_idempotence_rollback_and_rls(database: str) -> None:
         ]
         await asyncio.gather(ingest(database, updated, embed), ingest(database, updated, embed))
         store = PostgresKnowledgeStore(database)
+        ranked = await store.rank([1.0] + [0.0] * 767)
+        assert len(ranked) == 5
+        assert await store.search([1.0] + [0.0] * 767) == ranked[:4]
+        # Evaluation sees low-similarity ranking; serving correctly withholds it.
+        assert len(await store.rank([0.0, 1.0] + [0.0] * 766)) == 5
+        assert await store.search([0.0, 1.0] + [0.0] * 766) == []
         assert await store.source(original, "pricing") is not None
         assert all(
             c.corpus_id == corpus_id(updated) for c in await store.search([1.0] + [0.0] * 767)

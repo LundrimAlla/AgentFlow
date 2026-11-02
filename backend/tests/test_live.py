@@ -38,7 +38,7 @@ class ExternalServices:
 
     def handle(self, request: httpx.Request) -> httpx.Response:
         self.calls.append(request)
-        if request.url.host.endswith("upstash.io"):
+        if request.url.host == "fixture.upstash.io":
             self.reservation_count += 1
             if self.reservation_count == self.reject_reservation_number:
                 return httpx.Response(200, json={"result": [0, 60]})
@@ -120,7 +120,9 @@ def test_general_question_has_two_reserved_calls() -> None:
     services.intent = "GENERAL_QUESTION"
     response = services.client().post("/api/chat", json=PAYLOAD)
     assert response.status_code == 200 and services.generations == 2
-    reservations = [json.loads(r.content) for r in services.calls if "upstash" in r.url.host]
+    reservations = [
+        json.loads(r.content) for r in services.calls if r.url.host == "fixture.upstash.io"
+    ]
     assert len(reservations) == 4
     assert sum("{agentflow-test}:generation:day" in r for r in reservations) == 2
 
