@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { offlineExport } from "./deployment";
 
 const stages = [
   ["01", "Understand", "Validate the request and select a bounded workflow."],
@@ -13,7 +14,7 @@ export default function Home() {
         <h1>Useful AI.<br /><span>Visible decisions.</span></h1>
         <p className="intro">From a business question to a grounded answer. Explore how focused agents, company knowledge, and careful validation fit together.</p>
         <div className="actions"><Link className="button primary" href="/demo">Open workspace <span aria-hidden="true">↗</span></Link><Link className="text-link" href="/architecture">Explore the architecture →</Link></div>
-        <p className="small muted">Built with synthetic data. Explore the offline demo or the protected live preview.</p>
+        <p className="small muted">{offlineExport ? "Built with synthetic data. Public offline demo · no live AI calls." : "Built with synthetic data. Explore the offline demo or the protected live preview."}</p>
       </div>
       <div className="flow-card" aria-label="Planned agent workflow diagram">
         <div className="card-heading"><span>THE WORKFLOW</span><span className="pill">Design preview</span></div>

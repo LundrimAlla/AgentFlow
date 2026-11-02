@@ -5,6 +5,7 @@ import Workspace from "./workspace";
 import InvoiceDemo from "./invoice-demo";
 import invoice from "../../../backend/app/samples/invoice-001.expected.json";
 import type { Invoice } from "../live/api.generated";
+import { offlineExport } from "../deployment";
 
 export const dynamic = "force-static";
 
@@ -14,7 +15,7 @@ export default async function Demo() {
     id, await readFile(path.join(process.cwd(), "../demo-data/company", `${id}.md`), "utf8"),
   ])));
   const invoiceSource = await readFile(path.join(process.cwd(), "../backend/app/samples/invoice-001.txt"), "utf8");
-  return <><Workspace scenarios={scenarios} sources={sources} />
+  return <><Workspace scenarios={scenarios} sources={sources} liveEnabled={!offlineExport} />
     <div className="workspace"><InvoiceDemo source={invoiceSource} invoice={{ ...invoice, currency: "EUR" } satisfies Invoice} /></div>
   </>;
 }

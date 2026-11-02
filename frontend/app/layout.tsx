@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { offlineExport, offlineCsp } from "./deployment";
 
 export const metadata: Metadata = {
   title: "AgentFlow | AI workflows, made visible",
@@ -8,13 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>
+  return <html lang="en"><head>{offlineExport && <meta httpEquiv="Content-Security-Policy" content={offlineCsp} />}</head><body>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className="site-header">
       <Link className="brand" href="/"><span className="brand-mark" aria-hidden="true">aƒ</span> AgentFlow</Link>
       <nav aria-label="Main navigation"><Link href="/architecture">Architecture</Link><Link href="/demo">Workspace <span aria-hidden="true">↗</span></Link></nav>
     </header>
     <main id="main" tabIndex={-1}>{children}</main>
-    <footer><span>AgentFlow / Engineering in the open</span><span>Synthetic data only · Demo + live preview</span></footer>
+    <footer><span>AgentFlow / Engineering in the open</span><span>{offlineExport ? "Synthetic data only · Offline portfolio demo" : "Synthetic data only · Demo + live preview"}</span></footer>
   </body></html>;
 }

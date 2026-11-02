@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import type fixture from "../../../demo-data/scenarios.json";
 
-type Props = { scenarios: typeof fixture; sources: Record<string, string> };
+type Props = { scenarios: typeof fixture; sources: Record<string, string>; liveEnabled: boolean };
 
-export default function Workspace({ scenarios, sources }: Props) {
+export default function Workspace({ scenarios, sources, liveEnabled }: Props) {
   const [selected, setSelected] = useState(scenarios[0]?.id ?? "");
   const [completed, setCompleted] = useState<string | null>(null);
   const [source, setSource] = useState<string | null>(null);
@@ -29,7 +29,7 @@ export default function Workspace({ scenarios, sources }: Props) {
   return <section className="workspace">
     <div className="workspace-heading"><div><p className="eyebrow">EXPLORE / AGENT WORKSPACE</p><h1>A question. A workflow.<br /><span>Evidence you can inspect.</span></h1></div><span className="demo-badge">DEMO MODE · OFFLINE</span></div>
     <p className="workspace-intro">Choose a synthetic scenario to explore a prepared answer. No live AI runs, no request is submitted, and traces are illustrative.</p>
-    <p><Link className="text-link" href="/live">Try the protected live preview →</Link></p>
+    {liveEnabled && <p><Link className="text-link" href="/live">Try the protected live preview →</Link></p>}
     <p className="privacy-note">Do not submit personal, confidential, or sensitive information. This demo accepts preset scenarios only.</p>
     <fieldset className="scenario-picker"><legend>1. Choose a scenario</legend><div className="scenario-grid">{scenarios.map((item, index) => <label key={item.id} className={`scenario-option ${selected === item.id ? "selected" : ""}`}>
       <input type="radio" name="scenario" value={item.id} checked={selected === item.id} onChange={() => select(item.id)} />

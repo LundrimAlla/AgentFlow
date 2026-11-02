@@ -3,6 +3,7 @@ import path from "node:path";
 
 const apiOrigin = new URL(process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000").origin;
 const isDev = process.env.NODE_ENV === "development";
+const offlineExport = process.env.OFFLINE_EXPORT === "true";
 // Static rendering requires inline bootstrap scripts. This is an origin-restricting
 // baseline CSP, not a strict nonce policy; React escaping remains essential.
 const csp = [
@@ -20,9 +21,10 @@ const csp = [
 ].join("; ");
 
 const config: NextConfig = {
+  ...(offlineExport ? { output: "export", basePath: "/AgentFlow", trailingSlash: true, distDir: ".next-demo" } : {}),
   turbopack: { root: path.join(__dirname, "..") },
   poweredByHeader: false,
-  async headers() {
+  headers: offlineExport ? undefined : async () => {
     return [{ source: "/(.*)", headers: [
       { key: "Content-Security-Policy", value: csp },
       { key: "X-Content-Type-Options", value: "nosniff" },

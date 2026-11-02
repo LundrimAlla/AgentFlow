@@ -12,6 +12,7 @@ HLD.docx
 **/*.egg-info/
 **/node_modules/
 **/.next/
+**/.next-demo/
 **/out/
 **/*.tsbuildinfo
 coverage/
