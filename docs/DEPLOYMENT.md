@@ -29,3 +29,12 @@ No personal information input or live request form is available in the public bu
 References:
 - https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 - https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
+
+## Published verification — 2 November 2026
+
+Release commit: `61e07c2`. [Deployment run](https://github.com/LundrimAlla/AgentFlow/actions/runs/41460163509)
+completed successfully. CI and CodeQL also passed for this commit.
+Verified in the public browser: homepage navigation, demo scenario rendering,
+citation inspection and focus transfer, prepared invoice fields (EUR 357 total),
+architecture page, and disabled-live explanatory page. No browser errors were
+captured in the final inspected page. This smoke check does not complete M6.

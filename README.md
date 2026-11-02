@@ -2,7 +2,7 @@
 
 A portfolio application for grounded business AI workflows with synthetic data, explicit agent stages, and inspectable execution metadata.
 
-**Current status: offline demo and protected local live preview.** `/demo` has three prepared scenarios, source excerpts and illustrative traces, with no keys required. `/live` adds Gemini intent routing, draft lead extraction and general AgentFlow answers behind Turnstile and atomic Upstash quotas. Live RAG, document extraction, authentication and public deployment remain later milestones. Successful real-browser Turnstile admission is still awaiting a user check; adapter and rejection tests pass.
+**Current status: public offline portfolio and protected local live preview.** [Open the public demo](https://lundrimalla.github.io/AgentFlow/). The public site includes prepared scenarios, fictional sources and the invoice walkthrough; live AI is disabled there. Local live chat, retrieval and invoice extraction are implemented. M6 evaluation and live-release checks remain incomplete. See [deployment details](docs/DEPLOYMENT.md) and [M6 review](docs/M6-REVIEW.md).
 
 ## Run locally
 
